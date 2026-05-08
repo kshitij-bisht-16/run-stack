@@ -1,0 +1,259 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap');
+
+@import "tailwindcss";
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  min-height: 100%;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: 'Sora', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typing dots — matches Figma message-bubble 1607:58699 component set.
+   Three dots cycle the "largest" state in turn (400ms SMART_ANIMATE with
+   AFTER_TIMEOUT 1ms between variants → one full loop ≈ 1.2s). */
+@keyframes jm-dot-pulse {
+  0%, 100% { transform: scale(0.78); }  /* ≈ 3.24/4.17 */
+  33%      { transform: scale(1); }
+  66%      { transform: scale(0.89); }  /* ≈ 3.71/4.17 */
+}
+.jm-dot {
+  width: 4.2px;
+  height: 4.2px;
+  border-radius: 50%;
+  animation: jm-dot-pulse 1.2s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+}
+
+/* Orbit ring rotation for WorkWhileCard (Figma prob-card 3 hover state).
+   Keeps turning only while the card is hovered — signals "always working". */
+@keyframes wwys-orbit-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Lenis smooth-scroll hooks — required for proper scroll behavior */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* Per-word slide-up reveal — recreates the "text highlighting" effect from
+   string-tune.fiddle.digital's "Code with Clarity" step paragraphs (.-s-word
+   + p:before). A ::before renders the full text in brand-accent as a "ghost"
+   layer; the real text sits on top as word-masks (inline-block, overflow
+   hidden) whose inner spans start translated 100% below the line. When the
+   parent gets `.is-active`, each word slides up to translateY(0) with a
+   per-word stagger — revealing white text over the indigo ghost.
+
+   Stacking is explicit: the ::before lives at z:0, word-masks at z:1 so they
+   always paint over the ghost. Masks use `vertical-align: top` and an
+   explicit 1lh height so descenders (p, g, y, j) don't get clipped at the
+   bottom, and so every mask aligns to the same baseline as the ::before's
+   natural inline text. */
+.clarity-reveal {
+  position: relative;
+  display: block;
+  isolation: isolate;
+}
+.clarity-reveal::before {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  /* Figma 1033:6338 — inactive feature-card body text is --text-tertiary
+     (#6B6B6B). Ghost layer uses the same token so the "unrevealed" state
+     matches the static Figma treatment exactly. */
+  color: var(--text-tertiary);
+  pointer-events: none;
+  white-space: pre-wrap;
+  font: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  z-index: 0;
+}
+.clarity-word-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  line-height: inherit;
+  /* 1lh = one line-height. Keeps the mask exactly one line tall so descenders
+     fit inside it and the word's baseline lines up with the ::before's. */
+  height: 1lh;
+  position: relative;
+  z-index: 1;
+}
+.clarity-word-inner {
+  display: inline-block;
+  line-height: inherit;
+  transform: translateY(100%);
+  /* Leave state (un-reveal) — faster, no stagger, so scrolling back up feels
+     snappy instead of re-playing the cascade in reverse. */
+  transition: transform 0.25s cubic-bezier(0.7, 0, 0.84, 0);
+  transition-delay: 0s;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+.clarity-reveal.is-active .clarity-word-inner {
+  transform: translateY(0);
+  /* Enter state (reveal) — slower, per-word stagger. */
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: calc(var(--word-index, 0) * 0.04s);
+}
+@media (prefers-reduced-motion: reduce) {
+  .clarity-word-inner {
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Per-character blur + scale + fade stagger — recreates the title transition
+   from string-tune.fiddle.digital's "Code with Clarity" section
+   (`.-t-clarity-title-*` Vue transition). Each char sets its own `--char-index`
+   so the stagger cascades across the word. The "out" state is the default;
+   adding `is-active` on the parent label drives the "in" state. Entering chars
+   get a +0.3s base delay (so the old label visibly starts leaving first);
+   leaving chars have no base delay — this is what gives the clean pass-the-baton
+   feel in the original. */
+.clarity-char {
+  display: inline-block;
+  will-change: filter, opacity, transform;
+  filter: blur(clamp(0px, 0.15em, 0.5em));
+  opacity: 0;
+  transform: scale(1.5);
+  transition:
+    filter 0.6s cubic-bezier(0.33, 1, 0.68, 1),
+    opacity 0.6s cubic-bezier(0.65, 0, 0.35, 1),
+    transform 0.6s cubic-bezier(0.33, 1, 0.68, 1);
+  transition-delay: calc(var(--char-index, 0) * 0.0375s);
+}
+.clarity-label.is-active .clarity-char {
+  filter: blur(0);
+  opacity: 1;
+  transform: scale(1);
+  transition-delay: calc(var(--char-index, 0) * 0.0375s + 0.3s);
+}
+@media (prefers-reduced-motion: reduce) {
+  .clarity-char {
+    transition: none;
+    filter: none;
+    transform: none;
+    opacity: 0;
+  }
+  .clarity-label.is-active .clarity-char {
+    opacity: 1;
+  }
+}
+
+/* Final-CTA chevron drift — three layered chevrons (Figma "Final" 1806:9599
+   Group 1 vectors) gently float on Y axis with different phases so the
+   composition reads as alive but never distracts from the headline. Each
+   chevron also breathes opacity 0.85↔1 to feel like soft pulsing light. */
+@keyframes final-chevron-drift-a {
+  0%, 100% { transform: translate3d(0, -8px, 0); opacity: 0.92; }
+  50%      { transform: translate3d(0,  8px, 0); opacity: 1;    }
+}
+@keyframes final-chevron-drift-b {
+  0%, 100% { transform: translate3d(0,  10px, 0); opacity: 0.85; }
+  50%      { transform: translate3d(0, -10px, 0); opacity: 1;    }
+}
+@keyframes final-chevron-drift-c {
+  0%, 100% { transform: translate3d(0, -6px, 0); opacity: 0.88; }
+  50%      { transform: translate3d(0,  6px, 0); opacity: 1;    }
+}
+/* Chevrons now also slowly rotate ±2° around their pivot — combined with
+   the Y drift, this gives them a subtle "floating in space" feel. */
+@keyframes final-chevron-spin-a {
+  0%, 100% { transform: translate3d(0, -8px, 0) rotate(-1.5deg); opacity: 0.55; }
+  50%      { transform: translate3d(0,  8px, 0) rotate( 1.5deg); opacity: 0.85; }
+}
+@keyframes final-chevron-spin-b {
+  0%, 100% { transform: translate3d(0,  10px, 0) rotate( 2deg); opacity: 0.50; }
+  50%      { transform: translate3d(0, -10px, 0) rotate(-2deg); opacity: 0.80; }
+}
+@keyframes final-chevron-spin-c {
+  0%, 100% { transform: translate3d(0, -6px, 0) rotate(-2deg); opacity: 0.55; }
+  50%      { transform: translate3d(0,  6px, 0) rotate( 2deg); opacity: 0.85; }
+}
+
+/* Brand-accent radial glow that slowly breathes behind the headline —
+   adds depth without competing with the chevrons. */
+@keyframes final-glow-pulse {
+  0%, 100% { opacity: 0.30; transform: translate(-50%, -50%) scale(1); }
+  50%      { opacity: 0.55; transform: translate(-50%, -50%) scale(1.08); }
+}
+
+/* Hero masked logo float — gentle ±10px Y drift around its centred resting
+   position. The translateY(-50%) keeps the original vertical centering on
+   the right column, and the ±10px offset is composed in via calc() so the
+   animation doesn't fight the centering transform. */
+@keyframes hero-logo-float {
+  0%, 100% { transform: translateY(calc(-50% - 10px)); }
+  50%      { transform: translateY(calc(-50% + 10px)); }
+}
+
+/* Aurora sweep — a wide blurred indigo gradient bar that slowly drifts
+   across the section L→R, simulating a soft moving light source. The bar
+   is intentionally larger than the viewport so the sweep feels continuous. */
+@keyframes final-aurora-sweep {
+  0%   { transform: translate3d(-30%, 0, 0) skewX(-12deg); opacity: 0.45; }
+  50%  { transform: translate3d( 30%, 0, 0) skewX(-12deg); opacity: 0.7;  }
+  100% { transform: translate3d(130%, 0, 0) skewX(-12deg); opacity: 0.45; }
+}
+
+/* Floating accent dots — tiny indigo specks that gently rise and fade,
+   hinting at "particles of energy" without being a heavy particle system. */
+@keyframes final-dot-float {
+  0%   { transform: translate3d(0,    0,   0) scale(0.7); opacity: 0;   }
+  20%  {                                                  opacity: 0.8; }
+  80%  {                                                  opacity: 0.8; }
+  100% { transform: translate3d(0, -160px, 0) scale(1.1); opacity: 0;   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .final-chevron-a, .final-chevron-b, .final-chevron-c,
+  .final-glow, .final-aurora, .final-dot, .hero-logo-float {
+    animation: none !important;
+  }
+}
+
+/* Text reveal on scroll — pixels.studio-style fade + lift */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 900ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+.reveal-on-scroll.is-visible {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal-on-scroll {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
