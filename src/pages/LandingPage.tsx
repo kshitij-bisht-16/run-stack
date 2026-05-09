@@ -1341,7 +1341,7 @@ function ProbCard() {
           Best model for Every task.
         </h3>
         <p style={{ fontSize: '14px', lineHeight: '20px', color: 'var(--text-primary)', margin: 0 }}>
-          CrafterTech picks between Claude, GPT-4o, and Gemini for every single task — automatically.
+          RunStack picks between Claude, GPT-4o, and Gemini for every single task — automatically.
           You get the best output, not whoever you remembered to switch to.
         </p>
       </div>
@@ -2933,7 +2933,7 @@ export default function LandingPage() {
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           style={{ flexShrink: 0 }}
-          aria-label="CrafterTech"
+          aria-label="RunStack"
           role="img"
         >
           {/* Fevicon — three stacked chevrons, brand-accent */}
@@ -2965,7 +2965,7 @@ export default function LandingPage() {
             color: 'var(--text-primary)',
           }}
         >
-          © 2026 CrafterTech. All rights reserved.
+          © 2026 RunStack. All rights reserved.
         </span>
 
         {/* ft-links — Figma 1033:6508, horizontal gap 24, white labels with
