@@ -364,3 +364,61 @@ html.lenis body {
     animation-name: hero-logo-float-none !important;
   }
 }
+
+/* Infrastructure section */
+@media (max-width: 767px) {
+  .infra-section {
+    padding: 54px 20px !important;
+    gap: 32px !important;
+  }
+  .infra-header {
+    gap: 16px !important;
+    text-align: center !important;
+  }
+  .infra-title {
+    font-size: 32px !important;
+    line-height: 40px !important;
+  }
+  .infra-subtitle {
+    font-size: 13px !important;
+    line-height: 18px !important;
+  }
+  .infra-grid {
+    gap: 32px !important;
+  }
+  .infra-row {
+    flex-direction: column !important;
+    gap: 32px !important;
+  }
+  .infra-card {
+    width: 100% !important;
+    height: 390px !important;
+    flex: none !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 24px 16px !important;
+    overflow: hidden !important;
+  }
+  .infra-card.infra-card-pill {
+    border-radius: 24px !important;
+  }
+  .infra-card .infra-card-text {
+    width: 100% !important;
+    margin-top: 0 !important;
+    order: -1 !important;
+  }
+  .infra-card .infra-card-title {
+    font-size: 22px !important;
+    line-height: 28px !important;
+  }
+  .infra-card .infra-card-desc {
+    font-size: 12px !important;
+    line-height: 18px !important;
+  }
+  .infra-card .infra-card-illus {
+    width: auto !important;
+    max-width: 100% !important;
+    flex-shrink: 1 !important;
+  }
+}

@@ -834,6 +834,7 @@ function JustMessageCard() {
 
   return (
     <div
+      className="infra-card infra-card-pill"
       style={{
         flex: 1,
         height: '317px',
@@ -849,8 +850,8 @@ function JustMessageCard() {
       }}
     >
       {/* Content column */}
-      <div style={{ width: '270px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-        <h3
+      <div className="infra-card-text" style={{ width: '270px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <h3 className="infra-card-title"
           style={{
             fontSize: '32px',
             fontWeight: 700,
@@ -862,7 +863,7 @@ function JustMessageCard() {
         >
           Just message it.
         </h3>
-        <p style={{ fontSize: '14px', lineHeight: '20px', color: 'var(--text-inverse)', margin: 0 }}>
+        <p className="infra-card-desc" style={{ fontSize: '14px', lineHeight: '20px', color: 'var(--text-inverse)', margin: 0 }}>
           No dashboards to learn, no onboarding calls. Send your agent a message on WhatsApp —
           in plain language — and the work gets done. It really is that simple.
         </p>
@@ -870,6 +871,7 @@ function JustMessageCard() {
 
       {/* Messages panel */}
       <div
+        className="infra-card-illus"
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
         style={{
@@ -1002,6 +1004,7 @@ function KnowCard() {
 
   return (
     <div
+      className="infra-card infra-card-rect"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       style={{
@@ -1017,8 +1020,8 @@ function KnowCard() {
       }}
     >
       {/* Content */}
-      <div style={{ width: '249px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-        <h3
+      <div className="infra-card-text" style={{ width: '249px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <h3 className="infra-card-title"
           style={{
             fontSize: '32px',
             fontWeight: 700,
@@ -1030,7 +1033,7 @@ function KnowCard() {
         >
           Know what's working.
         </h3>
-        <p style={{ fontSize: '14px', lineHeight: '20px', color: 'var(--text-primary)', margin: 0 }}>
+        <p className="infra-card-desc" style={{ fontSize: '14px', lineHeight: '20px', color: 'var(--text-primary)', margin: 0 }}>
           Atlas tracks every agent's output, surfaces what performs, and tells you where to double down —
           before you have to ask. No spreadsheets, no guesswork.
         </p>
@@ -1160,6 +1163,7 @@ function WorkWhileCard() {
 
   return (
     <div
+      className="infra-card infra-card-rect"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       style={{
@@ -1185,8 +1189,8 @@ function WorkWhileCard() {
           centered in the 317-tall card). Card padding-top is 61px to anchor
           the orbit; the text column pulls itself up 12px with marginTop so its
           top edge lands at 49 — matching the Figma interaction exactly. */}
-      <div style={{ width: '216px', display: 'flex', flexDirection: 'column', gap: '20px', marginTop: '-12px' }}>
-        <h3
+      <div className="infra-card-text" style={{ width: '216px', display: 'flex', flexDirection: 'column', gap: '20px', marginTop: '-12px' }}>
+        <h3 className="infra-card-title"
           style={{
             fontSize: '32px',
             fontWeight: 700,
@@ -1198,7 +1202,7 @@ function WorkWhileCard() {
         >
           Work while you sleep.
         </h3>
-        <p style={{ fontSize: '14px', lineHeight: '20px', color: 'var(--text-primary)', margin: 0 }}>
+        <p className="infra-card-desc" style={{ fontSize: '14px', lineHeight: '20px', color: 'var(--text-primary)', margin: 0 }}>
           5 specialized agents handle your content, design, support, and automation — 24 hours a day, every day. The work never stops because your team never clocks out.
         </p>
       </div>
@@ -1207,6 +1211,7 @@ function WorkWhileCard() {
           on hover while the two icon circles stay anchored to their
           top/bottom positions (counter-rotation keeps them upright). */}
       <div
+        className="infra-card-illus"
         style={{
           width: '165px',
           height: '205px',
@@ -1312,6 +1317,7 @@ function ProbCard() {
 
   return (
     <div
+      className="infra-card infra-card-pill"
       style={{
         width: '700px',
         height: '317px',
@@ -1327,8 +1333,8 @@ function ProbCard() {
       }}
     >
       {/* Content column */}
-      <div style={{ width: '306px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-        <h3
+      <div className="infra-card-text" style={{ width: '306px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <h3 className="infra-card-title"
           style={{
             fontSize: '32px',
             fontWeight: 700,
@@ -1340,7 +1346,7 @@ function ProbCard() {
         >
           Best model for Every task.
         </h3>
-        <p style={{ fontSize: '14px', lineHeight: '20px', color: 'var(--text-primary)', margin: 0 }}>
+        <p className="infra-card-desc" style={{ fontSize: '14px', lineHeight: '20px', color: 'var(--text-primary)', margin: 0 }}>
           RunStack picks between Claude, GPT-4o, and Gemini for every single task — automatically.
           You get the best output, not whoever you remembered to switch to.
         </p>
@@ -1348,6 +1354,7 @@ function ProbCard() {
 
       {/* Chip illustration */}
       <div
+        className="infra-card-illus"
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
         style={{ width: '234px', height: '186px', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
@@ -1912,18 +1919,18 @@ export default function LandingPage() {
           - Heading + subtitle
           - 2×2 grid of cards: top row = 700px pill + 455px rect, bottom row = 455px rect + 700px pill
           - Pill cards (r=150) use brand accent fills, rect cards (r=16) use surface/hover fills */}
-      <section style={{ padding: '80px 72px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '60px', position: 'relative', overflow: 'hidden' }}>
+      <section className="infra-section" style={{ padding: '80px 72px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '60px', position: 'relative', overflow: 'hidden' }}>
         <DotGrid style={{ bottom: 0, left: 0, transform: 'rotate(180deg)' }} />
-        <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', gap: '20px', width: '100%', maxWidth: '1296px' }}>
-          <h2 style={{ fontSize: '44px', fontWeight: 700, lineHeight: '55px', margin: 0, color: 'var(--text-primary)' }}>
+        <div className="infra-header" style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', gap: '20px', width: '100%', maxWidth: '1296px' }}>
+          <h2 className="infra-title" style={{ fontSize: '44px', fontWeight: 700, lineHeight: '55px', margin: 0, color: 'var(--text-primary)' }}>
             The infrastructure behind businesses that scale.
           </h2>
-          <p style={{ fontSize: '13px', lineHeight: '18px', color: 'var(--text-primary)', margin: 0 }}>
+          <p className="infra-subtitle" style={{ fontSize: '13px', lineHeight: '18px', color: 'var(--text-primary)', margin: 0 }}>
             Runs your marketing, support, design, and automation — around the clock, without the overhead of a full team.
           </p>
         </div>
-        <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', gap: '33px', width: '100%', maxWidth: '1190px' }}>
-          <div style={{ display: 'flex', gap: '35px' }}>
+        <div className="infra-grid" style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', gap: '33px', width: '100%', maxWidth: '1190px' }}>
+          <div className="infra-row" style={{ display: 'flex', gap: '35px' }}>
             {/* Pill card — brand accent (prob-card, Figma 1479:44943) */}
             <ProbCard />
 
@@ -1931,7 +1938,7 @@ export default function LandingPage() {
             <KnowCard />
           </div>
           {/* Row 2 — Figma Frame 38: rect "Work while you sleep." (455, left) + pill "Just message it." (700, right) */}
-          <div style={{ display: 'flex', gap: '35px' }}>
+          <div className="infra-row" style={{ display: 'flex', gap: '35px' }}>
             {/* Rect card — Figma prob-card 3 - Interaction 1707:66623 */}
             <WorkWhileCard />
             {/* Pill card — brand-accent-light with messages illustration (Figma 1479:44957 / 1607:58963) */}
