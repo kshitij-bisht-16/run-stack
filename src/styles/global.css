@@ -492,8 +492,17 @@ html.lenis body {
   .agents-carousel-wrap {
     -ms-overflow-style: none;
     scrollbar-width: none;
+    max-width: 100vw !important;
   }
   .agents-carousel-wrap::-webkit-scrollbar {
     display: none;
+  }
+}
+
+/* Force all sections + footer to not cause horizontal overflow on mobile */
+@media (max-width: 767px) {
+  section, footer {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
   }
 }
