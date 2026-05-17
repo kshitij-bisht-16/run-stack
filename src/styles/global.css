@@ -264,6 +264,14 @@ html.lenis body {
 
 /* ═══ MOBILE RESPONSIVE ═══ */
 
+/* Prevent horizontal scroll on mobile */
+@media (max-width: 767px) {
+  html, body, #root {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+  }
+}
+
 /* Hide on mobile */
 @media (max-width: 767px) {
   .desktop-only { display: none !important; }
