@@ -468,3 +468,32 @@ html.lenis body {
     margin: -10px 0 !important;
   }
 }
+
+/* Agents section */
+@media (max-width: 767px) {
+  #agents {
+    padding: 80px 0 !important;
+    gap: 32px !important;
+  }
+  .agents-header {
+    padding: 0 20px !important;
+  }
+  .agents-title {
+    font-size: 32px !important;
+    line-height: 38px !important;
+  }
+  .agents-subtitle {
+    font-size: 13px !important;
+    line-height: 18px !important;
+  }
+  .agents-mobile {
+    display: flex !important;
+  }
+  .agents-carousel-wrap {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .agents-carousel-wrap::-webkit-scrollbar {
+    display: none;
+  }
+}

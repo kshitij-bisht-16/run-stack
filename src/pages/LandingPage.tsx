@@ -1989,18 +1989,99 @@ export default function LandingPage() {
         />
 
         {/* Centered header — per Figma, no eyebrow label on this variant */}
-        <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', maxWidth: '720px', textAlign: 'center' }}>
-          <h2 style={{ fontSize: '40px', fontWeight: 700, lineHeight: '48px', margin: 0, color: 'var(--text-primary)' }}>
+        <div className="agents-header" style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', maxWidth: '720px', textAlign: 'center' }}>
+          <h2 className="agents-title" style={{ fontSize: '40px', fontWeight: 700, lineHeight: '48px', margin: 0, color: 'var(--text-primary)' }}>
             Meet your new team
           </h2>
-          <p style={{ fontSize: '14px', lineHeight: '20px', color: 'var(--text-secondary)', margin: 0 }}>
+          <p className="agents-subtitle" style={{ fontSize: '14px', lineHeight: '20px', color: 'var(--text-secondary)', margin: 0 }}>
             Six specialists, always on, always aligned with your brand and goals.
           </p>
+        </div>
+
+        {/* ── Mobile agents carousel (Figma 1933:10112 / 1933:8105) ── */}
+        <div className="agents-mobile mobile-only" style={{ display: 'none', position: 'relative', zIndex: 1, flexDirection: 'column', alignItems: 'center', gap: '32px', width: '100%' }}>
+          {/* Logo */}
+          <div style={{ width: '175px', height: '175px', borderRadius: '40px', background: 'var(--bg-elevated)', border: '1px solid var(--text-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <svg width="87" height="49" viewBox="0 0 27 15" fill="none"><path d="M8.33622 8.28859L13.5 3.16555L18.6637 8.28859L20.25 6.71141L13.5 0L6.74997 6.71141L8.33622 8.28859Z" fill="var(--brand-accent)"/><path d="M15.0863 15L20.25 9.87696L25.4138 15L27 13.4228L20.25 6.71141L13.5 13.4228L15.0863 15Z" fill="var(--brand-accent)"/><path d="M1.58625 15L6.75 9.87696L11.9138 15L13.5 13.4228L6.74997 6.71141L0 13.4228L1.58625 15Z" fill="var(--brand-accent)"/></svg>
+          </div>
+          {/* Dotted line */}
+          <div style={{ width: '1px', height: '120px', backgroundImage: 'repeating-linear-gradient(to bottom, var(--text-primary) 0 2px, transparent 2px 8px)', opacity: 0.5, marginTop: '-16px', marginBottom: '-16px' }} />
+          {/* Arrow tip */}
+          <div style={{ width: 0, height: 0, borderLeft: '5px solid transparent', borderRight: '5px solid transparent', borderTop: '6px solid var(--text-primary)', opacity: 0.5, marginTop: '-20px' }} />
+          {/* Carousel — horizontally scrollable, centered cards */}
+          <div className="agents-carousel-wrap" style={{ width: '100%', overflowX: 'auto', overflowY: 'hidden', WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', scrollSnapType: 'x mandatory' }}>
+            <div
+              className="agents-carousel-track"
+              style={{
+                display: 'inline-flex',
+                gap: '20px',
+                padding: '0 calc(50% - 100px)',
+                alignItems: 'flex-start',
+              }}
+            >
+              {agents.map((a, i) => {
+                const isActive = i === activeAgent
+                return (
+                  <div
+                    key={a.name}
+                    className="agents-carousel-card"
+                    onClick={() => setActiveAgent(isActive ? -1 : i)}
+                    style={{
+                      width: isActive ? '200px' : '150px',
+                      minWidth: isActive ? '200px' : '150px',
+                      background: 'var(--bg-elevated)',
+                      borderRadius: isActive ? '16px' : '12px',
+                      overflow: 'hidden',
+                      cursor: 'pointer',
+                      transition: 'all 400ms cubic-bezier(0.42, 0, 0.58, 1)',
+                      flexShrink: 0,
+                      scrollSnapAlign: 'center',
+                    }}
+                  >
+                    {/* Accent bar */}
+                    <div style={{ height: isActive ? '3px' : '2px', background: a.color, transition: 'height 400ms ease' }} />
+                    {/* Content */}
+                    <div style={{ padding: isActive ? '16px 20px' : '12px 15px', display: 'flex', flexDirection: 'column', gap: isActive ? '12px' : '0px', transition: 'all 400ms ease' }}>
+                      {/* Icon + Name row */}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <div style={{
+                          width: isActive ? '50px' : '38px',
+                          height: isActive ? '50px' : '38px',
+                          borderRadius: isActive ? '14px' : '10px',
+                          background: a.color,
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          transition: 'all 400ms ease',
+                          flexShrink: 0,
+                        }}>
+                          <svg width={isActive ? '24' : '18'} height={isActive ? '24' : '18'} viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" dangerouslySetInnerHTML={{ __html: a.svg }} />
+                        </div>
+                        <div>
+                          <div style={{ fontSize: isActive ? '16px' : '12px', fontWeight: 700, color: 'var(--text-primary)', lineHeight: '1.2', transition: 'font-size 400ms ease' }}>{a.name}</div>
+                          <div style={{ fontSize: isActive ? '11px' : '8px', color: 'var(--text-tertiary)', lineHeight: '1.3', transition: 'font-size 400ms ease' }}>{a.role}</div>
+                        </div>
+                      </div>
+                      {/* Description — only visible when active */}
+                      <div style={{
+                        maxHeight: isActive ? '100px' : '0px',
+                        opacity: isActive ? 1 : 0,
+                        overflow: 'hidden',
+                        transition: 'max-height 400ms ease, opacity 300ms ease',
+                      }}>
+                        <div style={{ width: '100%', height: '1px', background: 'var(--border-subtle)', marginBottom: '10px' }} />
+                        <p style={{ fontSize: '12px', lineHeight: '16px', color: 'var(--text-primary)', margin: 0 }}>{a.desc}</p>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
         </div>
 
         {/* Tree visualization stage — 1200×820 container holding logo + SVG
             connectors + 5 cards. Positions are tuned against the Figma frame. */}
         <div
+          className="agents-tree desktop-only"
           ref={treeRef}
           style={{
             position: 'relative',
