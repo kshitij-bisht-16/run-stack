@@ -394,6 +394,7 @@ html.lenis body {
     width: 100% !important;
     height: 390px !important;
     flex: none !important;
+    display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
@@ -448,17 +449,17 @@ html.lenis body {
   /* List card — top-left, overlapping the chart */
   .infra-know-illus > div {
     top: 0 !important;
-    left: 10px !important;
+    left: 5px !important;
     z-index: 2 !important;
-    transform: scale(1.4) !important;
+    transform: scale(1.6) !important;
     transform-origin: top left !important;
   }
   /* Browser/chart — bottom-right, behind the list card */
   .infra-know-illus > svg {
-    top: 45px !important;
-    left: 80px !important;
+    top: 40px !important;
+    left: 75px !important;
     z-index: 1 !important;
-    transform: scale(1.4) !important;
+    transform: scale(1.6) !important;
     transform-origin: top left !important;
   }
   /* WorkWhileCard orbit: keep dimensions, scale to fit */
