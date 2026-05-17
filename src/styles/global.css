@@ -211,6 +211,10 @@ html.lenis body {
   0%, 100% { transform: translateY(calc(-50% - 10px)); }
   50%      { transform: translateY(calc(-50% + 10px)); }
 }
+@keyframes hero-logo-float-mobile {
+  0%, 100% { transform: translate(-50%, calc(-50% - 10px)); }
+  50%      { transform: translate(-50%, calc(-50% + 10px)); }
+}
 
 /* Aurora sweep — a wide blurred indigo gradient bar that slowly drifts
    across the section L→R, simulating a soft moving light source. The bar
@@ -255,5 +259,76 @@ html.lenis body {
     opacity: 1;
     transform: none;
     transition: none;
+  }
+}
+
+/* ═══ MOBILE RESPONSIVE ═══ */
+
+/* Hide on mobile */
+@media (max-width: 767px) {
+  .desktop-only { display: none !important; }
+}
+/* Hide on desktop */
+@media (min-width: 768px) {
+  .mobile-only { display: none !important; }
+}
+
+/* Nav */
+@media (max-width: 767px) {
+  .nav-outer { padding: 0 !important; }
+  .nav-bar { padding: 0 20px !important; }
+}
+
+/* Hero section */
+@media (max-width: 767px) {
+  .hero-section {
+    height: 100svh !important;
+    align-items: flex-end !important;
+    justify-content: center !important;
+    padding: 0 20px 48px !important;
+  }
+  .hero-text-col {
+    width: 100% !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 32px !important;
+  }
+  .hero-badge { align-self: center !important; }
+  .hero-heading-block { gap: 24px !important; }
+  .hero-title-line {
+    font-size: 32px !important;
+    line-height: 40px !important;
+  }
+  .hero-rotating-container { height: 40px !important; }
+  .hero-rotating-word {
+    font-size: 32px !important;
+    line-height: 40px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+  }
+  .hero-rotating-word[data-active="false"] {
+    /* keep the translateX(-50%) on animated words */
+  }
+  .hero-subtitle {
+    font-size: 14px !important;
+    line-height: 20px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  .hero-cta-row {
+    flex-direction: column !important;
+    width: 100% !important;
+  }
+  .hero-cta-row a,
+  .hero-cta-row button { width: 100% !important; }
+
+  /* Logo mask — centered behind text */
+  .hero-logo-mask {
+    right: auto !important;
+    left: 50% !important;
+    top: 30% !important;
+    width: 300px !important;
+    height: 200px !important;
+    animation-name: hero-logo-float-mobile !important;
   }
 }

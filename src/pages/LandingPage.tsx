@@ -1425,6 +1425,18 @@ const rotatingWords = ['automates tasks', 'handles support', 'reads analytics', 
 export default function LandingPage() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [wordIndex, setWordIndex] = useState(0)
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth < 768 : false
+  )
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)')
+    const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+    mq.addEventListener('change', onChange)
+    setIsMobile(mq.matches)
+    return () => mq.removeEventListener('change', onChange)
+  }, [])
   const stepRowRefs = useRef<(HTMLDivElement | null)[]>([])
   // -1 = no step reached yet (pre-scroll). Clamped to 0 in the stepper for
   // initial render so step 01 lights up from the start.
@@ -1577,6 +1589,7 @@ export default function LandingPage() {
 
       {/* ═══ NAV ═══ */}
       <div
+        className="nav-outer"
         style={{
           position: 'fixed',
           top: 0,
@@ -1590,6 +1603,7 @@ export default function LandingPage() {
         }}
       >
         <nav
+          className="nav-bar"
           style={{
             height: '72px',
             display: 'flex',
@@ -1629,16 +1643,60 @@ export default function LandingPage() {
               <path d="M53.2521 14.6671L49.0214 9.8107H47.3133L52.2987 4.30809H53.8877L49.4187 9.22324L49.518 8.42037L55 14.6671H53.2521ZM46.1017 14.6671V0.372063H47.5914V14.6671H46.1017Z" fill="white"/>
             </g>
           </svg>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
+          <div className="desktop-only" style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
             {['Agents', 'Features', 'Pricing', 'Docs'].map(item => (
               <a key={item} href={`#${item.toLowerCase()}`} style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-secondary)', textDecoration: 'none' }}>{item}</a>
             ))}
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <div className="desktop-only" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
             <Link to="/login" style={{ fontSize: '14px', fontWeight: 400, lineHeight: '20px', letterSpacing: '0.001em', color: 'var(--text-secondary)', textDecoration: 'none' }}>Login</Link>
             <Link to="/signup"><Button size="sm">Start free</Button></Link>
           </div>
+          <button
+            className="mobile-only"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '8px' }}
+            aria-label="Toggle menu"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text-primary)" strokeWidth="2" strokeLinecap="round">
+              {mobileMenuOpen ? (
+                <>
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                  <line x1="6" y1="18" x2="18" y2="6" />
+                </>
+              ) : (
+                <>
+                  <line x1="3" y1="6" x2="21" y2="6" />
+                  <line x1="3" y1="12" x2="21" y2="12" />
+                  <line x1="3" y1="18" x2="21" y2="18" />
+                </>
+              )}
+            </svg>
+          </button>
         </nav>
+        {/* Mobile menu dropdown */}
+        {mobileMenuOpen && (
+          <div style={{
+            background: 'rgba(17, 17, 17, 0.95)',
+            backdropFilter: 'blur(24px)',
+            WebkitBackdropFilter: 'blur(24px)',
+            border: '1px solid var(--border-default)',
+            borderRadius: 'var(--radius-xl)',
+            margin: '8px 16px 0',
+            padding: '20px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '16px',
+          }}>
+            {['Agents', 'Features', 'Pricing', 'Docs'].map(item => (
+              <a key={item} href={`#${item.toLowerCase()}`} onClick={() => setMobileMenuOpen(false)} style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-secondary)', textDecoration: 'none', padding: '8px 0' }}>{item}</a>
+            ))}
+            <div style={{ borderTop: '1px solid var(--border-default)', paddingTop: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <Link to="/login" style={{ fontSize: '14px', fontWeight: 400, color: 'var(--text-secondary)', textDecoration: 'none', padding: '8px 0' }}>Login</Link>
+              <Link to="/signup"><Button size="sm" style={{ width: '100%' }}>Start free</Button></Link>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* spacer to offset fixed nav */}
@@ -1648,7 +1706,7 @@ export default function LandingPage() {
           Two-column layout from Figma "Hero" frame (1031:6156):
           Left col (x:72, y:188): badge + heading + subtitle + CTAs, 552px wide, gap 56px
           Right col (x:889, y:255): FlickeringGrid masked to logo, 412×230 */}
-      <section style={{ height: '700px', position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', padding: '0 72px' }}>
+      <section className="hero-section" style={{ height: '700px', position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', padding: '0 72px' }}>
 
         {/* Hero background — same composition as the Final CTA but WITHOUT
             the floating chevron shapes (those read as duplicate brand logos
@@ -1756,7 +1814,7 @@ export default function LandingPage() {
             centered resting position; the keyframe uses calc(-50% ± 10px) so
             the float doesn't fight the existing translateY(-50%) centering. */}
         <div
-          className="hero-logo-float"
+          className="hero-logo-float hero-logo-mask"
           style={{
             position: 'absolute',
             right: '72px',
@@ -1790,21 +1848,21 @@ export default function LandingPage() {
         </div>
 
         {/* Left column — text content */}
-        <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '44px', width: '552px' }}>
+        <div className="hero-text-col" style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '44px', width: '552px' }}>
 
           {/* Badge */}
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', height: '28px', padding: '0 14px', borderRadius: 'var(--radius-full)', border: '1px solid var(--border-strong)', fontSize: '12px', lineHeight: '16px', color: 'var(--text-secondary)', alignSelf: 'flex-start' }}>
+          <span className="hero-badge" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', height: '28px', padding: '0 14px', borderRadius: 'var(--radius-full)', border: '1px solid var(--border-strong)', fontSize: '12px', lineHeight: '16px', color: 'var(--text-secondary)', alignSelf: 'flex-start' }}>
             <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--text-secondary)', flexShrink: 0 }} />
             AI Workforce Platform — Now in Beta
           </span>
 
           {/* Heading + subtitle block — gap 32px (Figma Frame 36 itemSpacing: 32) */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+          <div className="hero-heading-block" style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
             <h1 style={{ margin: 0 }}>
-              <span style={{ display: 'block', fontSize: '48px', fontWeight: 200, lineHeight: '56px', letterSpacing: '-0.005em', color: 'var(--text-primary)' }}>
-                Your AI Workforce
+              <span className="hero-title-line" style={{ display: 'block', fontSize: '48px', fontWeight: 200, lineHeight: '56px', letterSpacing: '-0.005em', color: 'var(--text-primary)' }}>
+                Your AI team
               </span>
-              <span style={{ display: 'block', position: 'relative', overflow: 'hidden', height: '56px' }}>
+              <span className="hero-rotating-container" style={{ display: 'block', position: 'relative', overflow: 'hidden', height: '56px' }}>
                 &nbsp;
                 {rotatingWords.map((word, index) => (
                   <motion.span
@@ -1816,6 +1874,7 @@ export default function LandingPage() {
                         ? { y: 0, opacity: 1 }
                         : { y: wordIndex > index ? -150 : 150, opacity: 0 }
                     }
+                    className="hero-rotating-word"
                     style={{
                       display: 'block',
                       fontSize: '48px',
@@ -1834,14 +1893,14 @@ export default function LandingPage() {
                 ))}
               </span>
             </h1>
-            <p style={{ fontSize: '16px', lineHeight: '24px', color: 'var(--text-primary)', margin: '0', width: '552px' }}>
-              Deploy specialized AI agents that write, design, automate, and communicate — 24/7 via dashboard and WhatsApp.
+            <p className="hero-subtitle" style={{ fontSize: '16px', lineHeight: '24px', color: 'var(--text-primary)', margin: '0', width: '552px' }}>
+              Deploy specialized AI agents that write, design, automate, and communicate — 24/7.
             </p>
           </div>
 
           {/* CTA row — both buttons SM (32px) per Figma "Landing Page" Hero
               cta-row instances: Primary SM "Start free" + Secondary SM "see it in action". */}
-          <div style={{ display: 'flex', gap: '12px' }}>
+          <div className="hero-cta-row" style={{ display: 'flex', gap: '12px' }}>
             <Link to="/signup"><Button size="sm">Start free</Button></Link>
             <Button variant="secondary" size="sm">see it in action</Button>
           </div>
