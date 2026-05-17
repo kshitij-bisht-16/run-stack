@@ -282,10 +282,12 @@ html.lenis body {
 /* Hero section */
 @media (max-width: 767px) {
   .hero-section {
-    height: 100svh !important;
-    align-items: flex-end !important;
+    height: auto !important;
+    min-height: 0 !important;
+    align-items: flex-start !important;
     justify-content: center !important;
-    padding: 0 20px 48px !important;
+    padding: 24px 20px 48px !important;
+    flex-direction: column !important;
   }
   .hero-text-col {
     width: 100% !important;
@@ -324,11 +326,14 @@ html.lenis body {
 
   /* Logo mask — centered behind text */
   .hero-logo-mask {
+    position: relative !important;
     right: auto !important;
-    left: 50% !important;
-    top: 30% !important;
-    width: 300px !important;
-    height: 200px !important;
-    animation-name: hero-logo-float-mobile !important;
+    left: auto !important;
+    top: auto !important;
+    transform: none !important;
+    width: 100% !important;
+    height: 260px !important;
+    margin: 0 auto !important;
+    animation-name: hero-logo-float-none !important;
   }
 }
