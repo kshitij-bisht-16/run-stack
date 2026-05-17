@@ -275,8 +275,21 @@ html.lenis body {
 
 /* Nav */
 @media (max-width: 767px) {
-  .nav-outer { padding: 0 !important; }
-  .nav-bar { padding: 0 20px !important; }
+  .nav-outer {
+    padding: 0 !important;
+    border-bottom: none !important;
+  }
+  .nav-bar {
+    height: 56px !important;
+    padding: 0 20px !important;
+    border: none !important;
+    border-radius: 0 !important;
+    max-width: 100% !important;
+    background: var(--bg-base) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  .nav-spacer { height: 56px !important; }
 }
 
 /* Hero section */

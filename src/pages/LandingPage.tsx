@@ -1700,7 +1700,7 @@ export default function LandingPage() {
       </div>
 
       {/* spacer to offset fixed nav */}
-      <div style={{ height: '72px' }} />
+      <div className="nav-spacer" style={{ height: '72px' }} />
 
       {/* ═══ HERO ═══
           Two-column layout from Figma "Hero" frame (1031:6156):
