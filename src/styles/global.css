@@ -399,26 +399,62 @@ html.lenis body {
     justify-content: center !important;
     padding: 24px 16px !important;
     overflow: hidden !important;
+    gap: 12px !important;
   }
   .infra-card.infra-card-pill {
     border-radius: 24px !important;
   }
+  /* Use display:contents to break the text wrapper so title, illustration,
+     and description can be individually reordered in the card's flex flow:
+     title (order 1) → illustration (order 2) → description (order 3). */
   .infra-card .infra-card-text {
-    width: 100% !important;
-    margin-top: 0 !important;
-    order: -1 !important;
+    display: contents !important;
   }
   .infra-card .infra-card-title {
     font-size: 22px !important;
     line-height: 28px !important;
+    text-align: center !important;
+    width: 100% !important;
+    order: 1 !important;
+    margin-top: 0 !important;
   }
   .infra-card .infra-card-desc {
     font-size: 12px !important;
     line-height: 18px !important;
+    text-align: center !important;
+    width: 100% !important;
+    order: 3 !important;
   }
   .infra-card .infra-card-illus {
+    order: 2 !important;
+    flex-shrink: 0 !important;
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    pointer-events: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  /* KnowCard: reposition absolute children into centered flow on mobile */
+  .infra-know-illus {
     width: auto !important;
-    max-width: 100% !important;
-    flex-shrink: 1 !important;
+    height: auto !important;
+    gap: 12px !important;
+  }
+  .infra-know-illus > svg,
+  .infra-know-illus > div {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    transform: scale(1.6) !important;
+  }
+  /* WorkWhileCard orbit: keep dimensions, scale to fit */
+  .infra-card-rect .infra-card-illus:not(.infra-know-illus) {
+    transform: scale(0.85) !important;
+    margin: -10px 0 !important;
   }
 }

@@ -1039,6 +1039,8 @@ function KnowCard() {
         </p>
       </div>
 
+      {/* Illustrations wrapper — absolutely positioned on desktop, flows on mobile */}
+      <div className="infra-card-illus infra-know-illus" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
       {/* Browser + chart illustration (top-right) */}
       <svg
         width="97"
@@ -1139,6 +1141,7 @@ function KnowCard() {
           <rect x="29" y="35" width="17" height="1.2" fill="#FFFFFF" />
         </svg>
       </div>
+      </div>{/* end infra-card-illus wrapper */}
     </div>
   )
 }
