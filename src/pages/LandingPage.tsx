@@ -223,6 +223,7 @@ function FeaturesSection() {
   return (
     <section
       id="features"
+      className="feat-section"
       ref={sectionRef}
       style={{
         background: 'var(--bg-base)',
@@ -264,6 +265,7 @@ function FeaturesSection() {
           leaves the viewport while the 4 features cascade. Also lift it ~3px
           so it doesn't sit under the progress bar. */}
       <div
+        className="feat-stage"
         style={{
           position: 'sticky',
           top: 0,
@@ -281,6 +283,7 @@ function FeaturesSection() {
       >
         {/* Header — LEFT-aligned across the full 1296 grid width */}
         <div
+          className="feat-header"
           style={{
             width: '100%',
             maxWidth: '1296px',
@@ -292,6 +295,7 @@ function FeaturesSection() {
           }}
         >
           <h2
+            className="feat-title"
             style={{
               fontSize: '44px',
               fontWeight: 600,
@@ -319,6 +323,7 @@ function FeaturesSection() {
             absolutely; only the active one gets `.is-active`, which drives the
             per-char blur/scale/opacity transition defined in global.css. */}
         <div
+          className="feat-rotating"
           aria-live="polite"
           style={{
             width: '100%',
@@ -364,6 +369,56 @@ function FeaturesSection() {
           <span style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0 0 0 0)' }}>{shownName}</span>
         </div>
 
+        {/* Feature stepper — numbered indicators, mobile only */}
+        <div className="feat-stepper mobile-only" style={{ display: 'none', alignItems: 'center', gap: '16px', justifyContent: 'center' }}>
+          {featuresList.map((_, i) => (
+            <span
+              key={i}
+              style={{
+                fontSize: '14px',
+                fontWeight: 600,
+                color: i === shownIdx ? 'var(--brand-accent)' : 'var(--text-tertiary)',
+                transition: 'color 320ms ease',
+              }}
+            >
+              ({i + 1})
+            </span>
+          ))}
+        </div>
+
+        {/* Mobile-only animated description — uses the same RevealText
+            word-slide-up animation as desktop. All descriptions are stacked
+            absolutely (never display:none) so CSS transitions always fire.
+            Only the active one gets `.is-active` which triggers the word
+            slide-up; inactive words stay at translateY(100%) behind their
+            masks. The ghost ::before is hidden on inactive via CSS. */}
+        <div
+          className="feat-desc-mobile mobile-only"
+          style={{
+            display: 'none',
+            width: '100%',
+            position: 'relative',
+            minHeight: '96px',
+          }}
+        >
+          {featuresList.map((f, i) => (
+            <div
+              key={f.name}
+              className={`feat-desc-item${i === shownIdx ? ' feat-desc-item-active' : ''}`}
+              style={{
+                position: 'absolute',
+                inset: 0,
+                fontSize: '16px',
+                fontWeight: 400,
+                lineHeight: '24px',
+                color: 'var(--text-primary)',
+              }}
+            >
+              <RevealText text={f.desc} active={i === shownIdx} />
+            </div>
+          ))}
+        </div>
+
         {/* Row of 4 feature cards — 309×188 each, body text only (Figma 1033:6338).
             Per Figma the card frames have NO fill and NO stroke — they're
             transparent containers for the body text, which is 16/24 Sora Regular
@@ -371,6 +426,7 @@ function FeaturesSection() {
             color shift (tertiary → white) comes entirely from the RevealText
             ghost layer, so cards themselves stay visually static. */}
         <div
+          className="feat-cards"
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
@@ -389,6 +445,7 @@ function FeaturesSection() {
             return (
               <div
                 key={f.name}
+                className={i === shownIdx ? 'feat-card-active' : ''}
                 style={{
                   height: '188px',
                   borderRadius: '12px',
@@ -751,9 +808,9 @@ function AnalyticsIllustration() {
         fill="none"
       />
       {/* Horizontal reference lines */}
-      <path d="M 120 40 L 245 40" stroke="#A3A3A3" strokeWidth="0.5" strokeDasharray="2 2" />
-      <path d="M 160 120 L 245 120" stroke="#A3A3A3" strokeWidth="0.5" strokeDasharray="2 2" />
-      <path d="M 140 130 L 245 130" stroke="#A3A3A3" strokeWidth="0.5" strokeDasharray="2 2" />
+      <path d="M 120 40 L 245 40" stroke="#B6B6B6" strokeWidth="0.5" strokeDasharray="2 2" />
+      <path d="M 160 120 L 245 120" stroke="#B6B6B6" strokeWidth="0.5" strokeDasharray="2 2" />
+      <path d="M 140 130 L 245 130" stroke="#B6B6B6" strokeWidth="0.5" strokeDasharray="2 2" />
       {/* Pie chart inside magnifier */}
       <g>
         {/* Magnifier lens (circle) */}
@@ -1452,6 +1509,30 @@ export default function LandingPage() {
   // initial render so step 01 lights up from the start.
   const [activeStep, setActiveStep] = useState(-1)
   const [activeAgent, setActiveAgent] = useState<number | null>(null)
+  const carouselRef = useRef<HTMLDivElement>(null)
+  const [centeredCard, setCenteredCard] = useState(0)
+
+  useEffect(() => {
+    const el = carouselRef.current
+    if (!el) return
+    const onScroll = () => {
+      const cards = el.querySelectorAll('.agents-carousel-card')
+      const wrapRect = el.getBoundingClientRect()
+      const wrapCenter = wrapRect.left + wrapRect.width / 2
+      let closest = 0
+      let minDist = Infinity
+      cards.forEach((card, i) => {
+        const rect = card.getBoundingClientRect()
+        const cardCenter = rect.left + rect.width / 2
+        const dist = Math.abs(wrapCenter - cardCenter)
+        if (dist < minDist) { minDist = dist; closest = i }
+      })
+      setCenteredCard(closest)
+    }
+    el.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
+    return () => el.removeEventListener('scroll', onScroll)
+  }, [])
   // Scroll-driven reveal for the agents tree. We track the tree container's
   // viewport top + viewport height — each tree element computes its own
   // 0→1 reveal based on where IT sits within the viewport, so every element
@@ -2009,71 +2090,114 @@ export default function LandingPage() {
           {/* Arrow tip */}
           <div style={{ width: 0, height: 0, borderLeft: '5px solid transparent', borderRight: '5px solid transparent', borderTop: '6px solid var(--text-primary)', opacity: 0.5, marginTop: '-20px' }} />
           {/* Carousel — horizontally scrollable, centered cards */}
-          <div className="agents-carousel-wrap" style={{ width: '100%', overflowX: 'auto', overflowY: 'hidden', WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', scrollSnapType: 'x mandatory' }}>
-            <div
-              className="agents-carousel-track"
+          {/* Carousel with chevron nav */}
+          <div style={{ position: 'relative', width: '100%' }}>
+            {/* Left chevron */}
+            <button
+              onClick={() => { if (carouselRef.current) carouselRef.current.scrollBy({ left: -164, behavior: 'smooth' }) }}
+              className="carousel-chevron carousel-chevron-left"
+              aria-label="Scroll left"
               style={{
-                display: 'inline-flex',
-                gap: '20px',
-                padding: '0 calc(50% - 100px)',
-                alignItems: 'flex-start',
+                position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)',
+                zIndex: 10, width: '32px', height: '32px', borderRadius: '50%',
+                background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
+                border: '1px solid rgba(255,255,255,0.15)', cursor: 'pointer',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}
             >
-              {agents.map((a, i) => {
-                const isActive = i === activeAgent
-                return (
-                  <div
-                    key={a.name}
-                    className="agents-carousel-card"
-                    onClick={() => setActiveAgent(isActive ? -1 : i)}
-                    style={{
-                      width: isActive ? '200px' : '150px',
-                      minWidth: isActive ? '200px' : '150px',
-                      background: 'var(--bg-elevated)',
-                      borderRadius: isActive ? '16px' : '12px',
-                      overflow: 'hidden',
-                      cursor: 'pointer',
-                      transition: 'all 400ms cubic-bezier(0.42, 0, 0.58, 1)',
-                      flexShrink: 0,
-                      scrollSnapAlign: 'center',
-                    }}
-                  >
-                    {/* Accent bar */}
-                    <div style={{ height: isActive ? '3px' : '2px', background: a.color, transition: 'height 400ms ease' }} />
-                    {/* Content */}
-                    <div style={{ padding: isActive ? '16px 20px' : '12px 15px', display: 'flex', flexDirection: 'column', gap: isActive ? '12px' : '0px', transition: 'all 400ms ease' }}>
-                      {/* Icon + Name row */}
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <div style={{
-                          width: isActive ? '50px' : '38px',
-                          height: isActive ? '50px' : '38px',
-                          borderRadius: isActive ? '14px' : '10px',
-                          background: a.color,
-                          display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          transition: 'all 400ms ease',
-                          flexShrink: 0,
-                        }}>
-                          <svg width={isActive ? '24' : '18'} height={isActive ? '24' : '18'} viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" dangerouslySetInnerHTML={{ __html: a.svg }} />
-                        </div>
-                        <div>
-                          <div style={{ fontSize: isActive ? '16px' : '12px', fontWeight: 700, color: 'var(--text-primary)', lineHeight: '1.2', transition: 'font-size 400ms ease' }}>{a.name}</div>
-                          <div style={{ fontSize: isActive ? '11px' : '8px', color: 'var(--text-tertiary)', lineHeight: '1.3', transition: 'font-size 400ms ease' }}>{a.role}</div>
-                        </div>
-                      </div>
-                      {/* Description — only visible when active */}
-                      <div style={{
-                        maxHeight: isActive ? '100px' : '0px',
-                        opacity: isActive ? 1 : 0,
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
+            </button>
+            {/* Right chevron */}
+            <button
+              onClick={() => { if (carouselRef.current) carouselRef.current.scrollBy({ left: 164, behavior: 'smooth' }) }}
+              className="carousel-chevron carousel-chevron-right"
+              aria-label="Scroll right"
+              style={{
+                position: 'absolute', right: '20px', top: '50%', transform: 'translateY(-50%)',
+                zIndex: 10, width: '32px', height: '32px', borderRadius: '50%',
+                background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
+                border: '1px solid rgba(255,255,255,0.15)', cursor: 'pointer',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6" /></svg>
+            </button>
+            <div ref={carouselRef} className="agents-carousel-wrap" style={{ width: '100%', overflowX: 'auto', overflowY: 'hidden', WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', scrollSnapType: 'x mandatory' }}>
+              <div
+                className="agents-carousel-track"
+                style={{
+                  display: 'inline-flex',
+                  gap: '24px',
+                  padding: '20px calc(50% - 75px)',
+                  alignItems: 'center',
+                }}
+              >
+                {agents.map((a, i) => {
+                  const isActive = i === activeAgent
+                  const isCentered = !isActive && i === centeredCard
+                  return (
+                    <div
+                      key={a.name}
+                      className="agents-carousel-card"
+                      onClick={() => setActiveAgent(isActive ? -1 : i)}
+                      style={{
+                        width: isActive ? '220px' : '150px',
+                        minWidth: isActive ? '220px' : '150px',
+                        background: 'var(--bg-elevated)',
+                        borderRadius: isActive ? '16px' : '12px',
                         overflow: 'hidden',
-                        transition: 'max-height 400ms ease, opacity 300ms ease',
+                        cursor: 'pointer',
+                        transform: isCentered ? 'scale(1.12)' : 'scale(1)',
+                        transition: 'all 400ms cubic-bezier(0.42, 0, 0.58, 1)',
+                        flexShrink: 0,
+                        scrollSnapAlign: 'center',
+                        zIndex: isCentered ? 2 : isActive ? 3 : 1,
+                      }}
+                    >
+                      {/* Accent bar */}
+                      <div style={{ height: isActive ? '3px' : isCentered ? '3px' : '2px', background: a.color, transition: 'height 400ms ease' }} />
+                      {/* Content */}
+                      <div style={{
+                        padding: isActive ? '16px 20px' : '12px 14px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: isActive ? '12px' : '0px',
+                        transition: 'all 400ms ease',
                       }}>
-                        <div style={{ width: '100%', height: '1px', background: 'var(--border-subtle)', marginBottom: '10px' }} />
-                        <p style={{ fontSize: '12px', lineHeight: '16px', color: 'var(--text-primary)', margin: 0 }}>{a.desc}</p>
+                        {/* Icon + Name row */}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                          <div style={{
+                            width: isActive ? '50px' : '42px',
+                            height: isActive ? '50px' : '42px',
+                            minWidth: isActive ? '50px' : '42px',
+                            borderRadius: isActive ? '14px' : '12px',
+                            background: a.colorMuted,
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            transition: 'all 400ms ease',
+                            flexShrink: 0,
+                          }}>
+                            <svg width={isActive ? '24' : '20'} height={isActive ? '24' : '20'} viewBox="0 0 24 24" fill={a.color}><path d={a.svg} /></svg>
+                          </div>
+                          <div>
+                            <div style={{ fontSize: isActive ? '16px' : '14px', fontWeight: 700, color: 'var(--text-primary)', lineHeight: '1.2', whiteSpace: 'nowrap' }}>{a.name}</div>
+                            <div style={{ fontSize: isActive ? '11px' : '10px', color: 'var(--text-tertiary)', lineHeight: '1.4', whiteSpace: 'nowrap' }}>{a.role}</div>
+                          </div>
+                        </div>
+                        {/* Description — only visible when active */}
+                        <div style={{
+                          maxHeight: isActive ? '120px' : '0px',
+                          opacity: isActive ? 1 : 0,
+                          overflow: 'hidden',
+                          transition: 'max-height 400ms ease, opacity 300ms ease',
+                        }}>
+                          <div style={{ width: '100%', height: '1px', background: 'var(--border-subtle)', marginBottom: '10px', marginTop: '4px' }} />
+                          <p style={{ fontSize: '13px', lineHeight: '18px', color: 'var(--text-secondary)', margin: 0, textAlign: 'center' }}>{a.desc}</p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                )
-              })}
+                  )
+                })}
+              </div>
             </div>
           </div>
         </div>
@@ -2476,6 +2600,7 @@ export default function LandingPage() {
           against its sticky trigger — the card that has reached its pin gets
           `activeStep`, driving the stepper number color. */}
       <section
+        className="hiw-section"
         style={{
           width: '100%',
           maxWidth: '1440px',
@@ -2484,10 +2609,11 @@ export default function LandingPage() {
           boxSizing: 'border-box',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '56px' }}>
+        <div className="hiw-layout" style={{ display: 'flex', alignItems: 'flex-start', gap: '56px' }}>
           {/* Left column — title + stepper, sticky at top 156 so it pins while the
               right column scrolls through its cards. */}
           <div
+            className="hiw-left"
             style={{
               width: '600px',
               flexShrink: 0,
@@ -2499,6 +2625,7 @@ export default function LandingPage() {
             }}
           >
             <h2
+              className="hiw-title"
               style={{
                 fontSize: '44px',
                 fontWeight: 600,
@@ -2515,7 +2642,7 @@ export default function LandingPage() {
             {/* Stepper — number lights up in brand-accent once the matching card
                 pins. Pre-scroll activeStep is -1; we clamp to 0 so step 01 is lit
                 on initial render. */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div className="hiw-stepper" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               {steps.map((s, i) => {
                 const clamped = activeStep < 0 ? 0 : activeStep
                 const isActive = i === clamped
@@ -2560,6 +2687,7 @@ export default function LandingPage() {
               156 + i*22, so they nest visually on top of one another. The
               marginTop staggers when each card starts its pin. */}
           <div
+            className="hiw-cards"
             style={{
               width: '640px',
               flexShrink: 0,
@@ -2570,6 +2698,7 @@ export default function LandingPage() {
             {steps.map((s, i) => (
               <div
                 key={s.num}
+                className="hiw-card-wrap"
                 style={{
                   position: 'absolute',
                   top: 0,
@@ -2583,6 +2712,7 @@ export default function LandingPage() {
                   ref={(el) => {
                     stepRowRefs.current[i] = el
                   }}
+                  className="hiw-card"
                   style={{
                     position: 'sticky',
                     top: `${156 + i * 22}px`,
@@ -2653,10 +2783,10 @@ export default function LandingPage() {
           and a slightly stronger divider (#3a3a3a) — Starter/Enterprise use surface bg
           + 1px subtle border. Per request, the floating "Most popular" pill is kept
           in its current position (absolute, top:-12px, brand-accent ring on bg-base). */}
-      <section id="pricing" style={{ padding: '80px 72px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '60px' }}>
-        <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'center', width: '600px' }}>
+      <section id="pricing" className="pricing-section" style={{ padding: '80px 72px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '60px' }}>
+        <div className="pricing-header" style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'center', width: '600px' }}>
           {/* Two-tone heading per Figma 1033:6374 — "Simple" is muted (text-secondary,
-              #A3A3A3) and ", scalable pricing" is full white (text-primary). The
+              #B6B6B6) and ", scalable pricing" is full white (text-primary). The
               fill is mixed at character level in Figma; we mirror it with a span. */}
           <h2 style={{ fontSize: '44px', fontWeight: 600, lineHeight: '56px', letterSpacing: '-0.003em', margin: 0, color: 'var(--text-primary)' }}>
             <span style={{ color: 'var(--text-secondary)' }}>Simple</span>, scalable pricing
@@ -2665,10 +2795,11 @@ export default function LandingPage() {
             Start free, scale as your team grows. No contracts, no hidden fees.
           </p>
         </div>
-        <div style={{ display: 'flex', gap: '20px', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+        <div className="pricing-cards" style={{ display: 'flex', gap: '20px', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
           {pricingPlans.map(plan => (
             <div
               key={plan.tier}
+              className={`pricing-card${plan.highlighted ? ' pricing-card-highlighted' : ''}`}
               style={{
                 width: '394px',
                 background: plan.highlighted ? 'var(--bg-elevated)' : 'var(--bg-surface)',
@@ -2782,6 +2913,7 @@ export default function LandingPage() {
           Animation: each chevron drifts on Y axis at a different phase, plus
           a soft brand-accent glow breathes behind the text. */}
       <section
+        className="final-section"
         style={{
           padding: '96px 72px',
           position: 'relative',
@@ -2839,7 +2971,7 @@ export default function LandingPage() {
             <>
               {/* 1 — FlickeringGrid backdrop. Neutral grayscale tint (no brand
                   colour) at low maxOpacity gives a subtle, alive texture
-                  across the whole section. Base #A3A3A3 = --text-secondary. */}
+                  across the whole section. Base #B6B6B6 = --text-secondary. */}
               <div
                 style={{
                   position: 'absolute',
@@ -2998,6 +3130,7 @@ export default function LandingPage() {
 
         {/* Frame 63 — text content + CTA, 800 wide, gap 16 between every child. */}
         <div
+          className="final-content"
           style={{
             position: 'relative',
             zIndex: 1,
@@ -3015,6 +3148,7 @@ export default function LandingPage() {
               and "Are you?" each render as block-level spans with the Figma
               16px gap and -0.5% letter-spacing. */}
           <h2
+            className="final-heading"
             style={{
               display: 'flex',
               flexDirection: 'column',
@@ -3063,6 +3197,7 @@ export default function LandingPage() {
                Privacy / Terms / Docs — each 12/16 Regular white.
           Hover state on links shifts to brand-accent for affordance. */}
       <footer
+        className="site-footer"
         style={{
           height: '72px',
           display: 'flex',
