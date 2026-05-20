@@ -394,7 +394,8 @@ html.lenis body {
     gap: 32px !important;
   }
   .infra-card {
-    width: 100% !important;
+    width: 320px !important;
+    max-width: 100% !important;
     height: 390px !important;
     flex: none !important;
     display: flex !important;
