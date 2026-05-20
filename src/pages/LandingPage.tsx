@@ -2831,7 +2831,7 @@ export default function LandingPage() {
 
               {/* Price row — 40px ExtraBold + 14px /mo period (text-secondary). */}
               <div style={{ display: 'flex', alignItems: 'baseline', gap: '2px' }}>
-                <span style={{ fontSize: '40px', fontWeight: 800, lineHeight: '48px', letterSpacing: '-0.005em', color: 'var(--text-primary)' }}>
+                <span className="pricing-price" style={{ fontSize: '40px', fontWeight: 800, lineHeight: '48px', letterSpacing: '-0.005em', color: 'var(--text-primary)' }}>
                   {plan.price}
                 </span>
                 {plan.period && (

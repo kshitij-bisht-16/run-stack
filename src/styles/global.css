@@ -647,6 +647,11 @@ html.lenis body {
   .pricing-card {
     width: 100% !important;
   }
+  .pricing-price {
+    font-size: 22px !important;
+    font-weight: 700 !important;
+    line-height: 28px !important;
+  }
 }
 
 /* ── Final CTA section mobile ── */
