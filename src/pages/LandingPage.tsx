@@ -2165,7 +2165,7 @@ export default function LandingPage() {
                         transition: 'all 400ms ease',
                       }}>
                         {/* Icon + Name row */}
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', justifyContent: 'space-between', width: '100%' }}>
                           <div style={{
                             width: isActive ? '50px' : isCentered ? '50px' : '38px',
                             height: isActive ? '50px' : isCentered ? '50px' : '38px',
@@ -2178,7 +2178,7 @@ export default function LandingPage() {
                           }}>
                             <svg width={isActive || isCentered ? '24' : '20'} height={isActive || isCentered ? '24' : '20'} viewBox="0 0 24 24" fill={a.color}><path d={a.svg} /></svg>
                           </div>
-                          <div>
+                          <div style={{ textAlign: 'left' }}>
                             <div style={{ fontSize: isActive ? '16px' : isCentered ? '16px' : '12px', fontWeight: 700, color: 'var(--text-primary)', lineHeight: '1.2', whiteSpace: 'nowrap' }}>{a.name}</div>
                             <div style={{ fontSize: isActive ? '11px' : isCentered ? '11px' : '8px', color: 'var(--text-tertiary)', lineHeight: '1.4', whiteSpace: 'nowrap' }}>{a.role}</div>
                           </div>
