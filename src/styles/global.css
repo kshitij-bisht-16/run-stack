@@ -364,6 +364,7 @@ html.lenis body {
     margin: 0 auto !important;
     animation: hero-logo-float-mobile 6s ease-in-out infinite !important;
     will-change: transform !important;
+    filter: brightness(1.5) !important;
   }
 }
 
