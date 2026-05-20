@@ -1512,27 +1512,22 @@ export default function LandingPage() {
   const carouselRef = useRef<HTMLDivElement>(null)
   const [centeredCard, setCenteredCard] = useState(0)
 
-  useEffect(() => {
+  // Helper to scroll a card to center
+  const scrollCardToCenter = (index: number) => {
     const el = carouselRef.current
     if (!el) return
-    const onScroll = () => {
-      const cards = el.querySelectorAll('.agents-carousel-card')
-      const wrapRect = el.getBoundingClientRect()
-      const wrapCenter = wrapRect.left + wrapRect.width / 2
-      let closest = 0
-      let minDist = Infinity
-      cards.forEach((card, i) => {
-        const rect = card.getBoundingClientRect()
-        const cardCenter = rect.left + rect.width / 2
-        const dist = Math.abs(wrapCenter - cardCenter)
-        if (dist < minDist) { minDist = dist; closest = i }
+    // Wait for React re-render + CSS width transition, then scroll
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const card = el.querySelectorAll('.agents-carousel-card')[index]
+        if (!card) return
+        const wrapRect = el.getBoundingClientRect()
+        const cardRect = card.getBoundingClientRect()
+        const offset = cardRect.left - wrapRect.left + el.scrollLeft - (wrapRect.width / 2 - cardRect.width / 2)
+        el.scrollTo({ left: offset, behavior: 'smooth' })
       })
-      setCenteredCard(closest)
-    }
-    el.addEventListener('scroll', onScroll, { passive: true })
-    onScroll()
-    return () => el.removeEventListener('scroll', onScroll)
-  }, [])
+    })
+  }
   // Scroll-driven reveal for the agents tree. We track the tree container's
   // viewport top + viewport height — each tree element computes its own
   // 0→1 reveal based on where IT sits within the viewport, so every element
@@ -2094,7 +2089,7 @@ export default function LandingPage() {
           <div style={{ position: 'relative', width: '100%' }}>
             {/* Left chevron */}
             <button
-              onClick={() => { if (carouselRef.current) carouselRef.current.scrollBy({ left: -164, behavior: 'smooth' }) }}
+              onClick={() => { const next = Math.max(0, centeredCard - 1); setCenteredCard(next); scrollCardToCenter(next); }}
               className="carousel-chevron carousel-chevron-left"
               aria-label="Scroll left"
               style={{
@@ -2109,7 +2104,7 @@ export default function LandingPage() {
             </button>
             {/* Right chevron */}
             <button
-              onClick={() => { if (carouselRef.current) carouselRef.current.scrollBy({ left: 164, behavior: 'smooth' }) }}
+              onClick={() => { const next = Math.min(agents.length - 1, centeredCard + 1); setCenteredCard(next); scrollCardToCenter(next); }}
               className="carousel-chevron carousel-chevron-right"
               aria-label="Scroll right"
               style={{
@@ -2122,7 +2117,7 @@ export default function LandingPage() {
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6" /></svg>
             </button>
-            <div ref={carouselRef} className="agents-carousel-wrap" style={{ width: '100%', overflowX: 'auto', overflowY: 'hidden', WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', scrollSnapType: 'x mandatory' }}>
+            <div ref={carouselRef} className="agents-carousel-wrap" style={{ width: '100%', overflowX: 'auto', overflowY: 'hidden', WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', }}>
               <div
                 className="agents-carousel-track"
                 style={{
@@ -2150,7 +2145,6 @@ export default function LandingPage() {
                         cursor: 'pointer',
                         transition: 'all 400ms cubic-bezier(0.42, 0, 0.58, 1)',
                         flexShrink: 0,
-                        scrollSnapAlign: 'center',
                         zIndex: isCentered ? 2 : isActive ? 3 : 1,
                       }}
                     >
