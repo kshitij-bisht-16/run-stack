@@ -351,7 +351,8 @@ html.lenis body {
     gap: 12px !important;
   }
   .hero-cta-row a,
-  .hero-cta-row button { width: 141px !important; height: 40px !important; }
+  .hero-cta-row a button { width: 268px !important; height: 40px !important; }
+  .hero-cta-secondary { display: none !important; }
 
   /* Logo mask — centered behind text */
   .hero-logo-mask {

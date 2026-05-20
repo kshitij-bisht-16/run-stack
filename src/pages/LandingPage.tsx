@@ -1993,7 +1993,7 @@ export default function LandingPage() {
               cta-row instances: Primary SM "Start free" + Secondary SM "see it in action". */}
           <div className="hero-cta-row" style={{ display: 'flex', gap: '12px' }}>
             <Link to="/signup"><Button size="sm">Start free</Button></Link>
-            <Button variant="secondary" size="sm">see it in action</Button>
+            <Button className="hero-cta-secondary" variant="secondary" size="sm">see it in action</Button>
           </div>
         </div>
       </section>
