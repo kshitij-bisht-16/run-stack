@@ -346,10 +346,12 @@ html.lenis body {
   }
   .hero-cta-row {
     flex-direction: column !important;
-    width: 100% !important;
+    width: auto !important;
+    align-items: center !important;
+    gap: 12px !important;
   }
   .hero-cta-row a,
-  .hero-cta-row button { width: 100% !important; }
+  .hero-cta-row button { width: auto !important; height: 40px !important; }
 
   /* Logo mask — centered behind text */
   .hero-logo-mask {
