@@ -357,8 +357,8 @@ html.lenis body {
     right: auto !important;
     left: auto !important;
     top: auto !important;
-    width: 100% !important;
-    height: 260px !important;
+    width: 70% !important;
+    height: 200px !important;
     margin: 0 auto !important;
     animation: hero-logo-float-mobile 6s ease-in-out infinite !important;
     will-change: transform !important;
