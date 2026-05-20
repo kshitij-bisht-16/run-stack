@@ -2127,7 +2127,7 @@ export default function LandingPage() {
                 className="agents-carousel-track"
                 style={{
                   display: 'inline-flex',
-                  gap: '24px',
+                  gap: '20px',
                   padding: '20px calc(50% - 100px)',
                   alignItems: 'center',
                 }}
@@ -2145,7 +2145,7 @@ export default function LandingPage() {
                         minWidth: isActive ? '220px' : isCentered ? '200px' : '150px',
                         height: isActive ? 'auto' : isCentered ? '93px' : '70px',
                         background: 'var(--bg-elevated)',
-                        borderRadius: isActive ? '16px' : '12px',
+                        borderRadius: isActive ? '16px' : isCentered ? '16px' : '12px',
                         overflow: 'hidden',
                         cursor: 'pointer',
                         transition: 'all 400ms cubic-bezier(0.42, 0, 0.58, 1)',
@@ -2158,7 +2158,7 @@ export default function LandingPage() {
                       <div style={{ height: isActive ? '3px' : isCentered ? '3px' : '2px', background: a.color, transition: 'height 400ms ease' }} />
                       {/* Content */}
                       <div style={{
-                        padding: isActive ? '16px 20px' : '12px 14px',
+                        padding: isActive ? '16px 20px' : isCentered ? '20px' : '15px',
                         display: 'flex',
                         flexDirection: 'column',
                         gap: isActive ? '12px' : '0px',
@@ -2167,20 +2167,20 @@ export default function LandingPage() {
                         {/* Icon + Name row */}
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                           <div style={{
-                            width: isActive ? '50px' : '42px',
-                            height: isActive ? '50px' : '42px',
-                            minWidth: isActive ? '50px' : '42px',
-                            borderRadius: isActive ? '14px' : '12px',
+                            width: isActive ? '50px' : isCentered ? '50px' : '38px',
+                            height: isActive ? '50px' : isCentered ? '50px' : '38px',
+                            minWidth: isActive ? '50px' : isCentered ? '50px' : '38px',
+                            borderRadius: isActive ? '14px' : isCentered ? '14px' : '12px',
                             background: a.colorMuted,
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
                             transition: 'all 400ms ease',
                             flexShrink: 0,
                           }}>
-                            <svg width={isActive ? '24' : '20'} height={isActive ? '24' : '20'} viewBox="0 0 24 24" fill={a.color}><path d={a.svg} /></svg>
+                            <svg width={isActive || isCentered ? '24' : '20'} height={isActive || isCentered ? '24' : '20'} viewBox="0 0 24 24" fill={a.color}><path d={a.svg} /></svg>
                           </div>
                           <div>
-                            <div style={{ fontSize: isActive ? '16px' : '14px', fontWeight: 700, color: 'var(--text-primary)', lineHeight: '1.2', whiteSpace: 'nowrap' }}>{a.name}</div>
-                            <div style={{ fontSize: isActive ? '11px' : '10px', color: 'var(--text-tertiary)', lineHeight: '1.4', whiteSpace: 'nowrap' }}>{a.role}</div>
+                            <div style={{ fontSize: isActive ? '16px' : isCentered ? '16px' : '12px', fontWeight: 700, color: 'var(--text-primary)', lineHeight: '1.2', whiteSpace: 'nowrap' }}>{a.name}</div>
+                            <div style={{ fontSize: isActive ? '11px' : isCentered ? '11px' : '8px', color: 'var(--text-tertiary)', lineHeight: '1.4', whiteSpace: 'nowrap' }}>{a.role}</div>
                           </div>
                         </div>
                         {/* Description — only visible when active */}
