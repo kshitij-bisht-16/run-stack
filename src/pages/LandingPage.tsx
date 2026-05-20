@@ -408,9 +408,9 @@ function FeaturesSection() {
               style={{
                 position: 'absolute',
                 inset: 0,
-                fontSize: '16px',
+                fontSize: '15px',
                 fontWeight: 400,
-                lineHeight: '24px',
+                lineHeight: '22px',
                 color: 'var(--text-primary)',
               }}
             >
