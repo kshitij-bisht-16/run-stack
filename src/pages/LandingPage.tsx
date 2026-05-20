@@ -2128,7 +2128,7 @@ export default function LandingPage() {
                 style={{
                   display: 'inline-flex',
                   gap: '24px',
-                  padding: '20px calc(50% - 75px)',
+                  padding: '20px calc(50% - 100px)',
                   alignItems: 'center',
                 }}
               >
@@ -2141,13 +2141,13 @@ export default function LandingPage() {
                       className="agents-carousel-card"
                       onClick={() => setActiveAgent(isActive ? -1 : i)}
                       style={{
-                        width: isActive ? '220px' : '150px',
-                        minWidth: isActive ? '220px' : '150px',
+                        width: isActive ? '220px' : isCentered ? '200px' : '150px',
+                        minWidth: isActive ? '220px' : isCentered ? '200px' : '150px',
+                        height: isActive ? 'auto' : isCentered ? '93px' : '70px',
                         background: 'var(--bg-elevated)',
                         borderRadius: isActive ? '16px' : '12px',
                         overflow: 'hidden',
                         cursor: 'pointer',
-                        transform: isCentered ? 'scale(1.12)' : 'scale(1)',
                         transition: 'all 400ms cubic-bezier(0.42, 0, 0.58, 1)',
                         flexShrink: 0,
                         scrollSnapAlign: 'center',
