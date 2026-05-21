@@ -530,7 +530,7 @@ html.lenis body {
     top: 56px !important;
     z-index: 5 !important;
     align-items: center !important;
-    background: var(--bg-primary) !important;
+    background: var(--bg-base) !important;
     padding: 16px 0 12px !important;
   }
   .hiw-title {
@@ -544,6 +544,7 @@ html.lenis body {
     width: 100% !important;
     height: 200vh !important;
     position: relative !important;
+    z-index: 10 !important;
   }
   .hiw-card-wrap {
     position: absolute !important;
@@ -558,10 +559,11 @@ html.lenis body {
     padding: 20px !important;
     border-radius: 14px !important;
     pointer-events: auto !important;
+    background: var(--bg-base) !important;
   }
-  .hiw-card-wrap:nth-child(1) .hiw-card { top: 225px !important; margin-top: 0 !important; }
-  .hiw-card-wrap:nth-child(2) .hiw-card { top: 241px !important; margin-top: 60vh !important; }
-  .hiw-card-wrap:nth-child(3) .hiw-card { top: 257px !important; margin-top: 120vh !important; }
+  .hiw-card-wrap:nth-child(1) .hiw-card { top: 231px !important; margin-top: 0 !important; }
+  .hiw-card-wrap:nth-child(2) .hiw-card { top: 247px !important; margin-top: 60vh !important; }
+  .hiw-card-wrap:nth-child(3) .hiw-card { top: 263px !important; margin-top: 120vh !important; }
 }
 
 /* ── Features section mobile ── */
@@ -578,7 +580,7 @@ html.lenis body {
     padding-bottom: 40px !important;
   }
   .feat-section {
-    height: 150vh !important;
+    height: 350vh !important;
   }
   .feat-header {
     align-items: center !important;
@@ -622,6 +624,11 @@ html.lenis body {
   .feat-desc-mobile .feat-desc-item-active .clarity-reveal::before {
     opacity: 1;
     transition: opacity 0.3s ease 0.15s;
+  }
+  /* Slow down the word-reveal animation on mobile */
+  .feat-desc-mobile .clarity-reveal.is-active .clarity-word-inner {
+    transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1) !important;
+    transition-delay: calc(var(--word-index, 0) * 0.12s) !important;
   }
   .feat-cards {
     display: none !important;
