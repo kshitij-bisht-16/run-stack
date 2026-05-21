@@ -1521,6 +1521,47 @@ export default function LandingPage() {
     if (!el) return
     el.scrollTo({ left: index * 170, behavior: 'smooth' })
   }
+
+  // Update centeredCard on finger swipe and snap-align when scrolling stops
+  useEffect(() => {
+    const el = carouselRef.current
+    if (!el) return
+    let ticking = false
+    let snapTimer: ReturnType<typeof setTimeout> | null = null
+    let isChevronScroll = false
+
+    // Flag chevron-triggered scrolls so we don't double-snap
+    const origScrollTo = el.scrollTo.bind(el)
+    el.scrollTo = (...args: any[]) => {
+      isChevronScroll = true
+      origScrollTo(...args)
+      setTimeout(() => { isChevronScroll = false }, 500)
+    }
+
+    const onScroll = () => {
+      if (ticking) return
+      ticking = true
+      requestAnimationFrame(() => {
+        const idx = Math.round(el.scrollLeft / 170)
+        const clamped = Math.max(0, Math.min(agents.length - 1, idx))
+        setCenteredCard(clamped)
+        ticking = false
+      })
+      // Debounce: snap to exact position when scrolling stops
+      if (snapTimer) clearTimeout(snapTimer)
+      snapTimer = setTimeout(() => {
+        if (isChevronScroll) return
+        const idx = Math.round(el.scrollLeft / 170)
+        const clamped = Math.max(0, Math.min(agents.length - 1, idx))
+        el.scrollTo({ left: clamped * 170, behavior: 'smooth' })
+      }, 150)
+    }
+    el.addEventListener('scroll', onScroll, { passive: true })
+    return () => {
+      el.removeEventListener('scroll', onScroll)
+      if (snapTimer) clearTimeout(snapTimer)
+    }
+  }, [])
   // Scroll-driven reveal for the agents tree. We track the tree container's
   // viewport top + viewport height — each tree element computes its own
   // 0→1 reveal based on where IT sits within the viewport, so every element
