@@ -2079,7 +2079,7 @@ export default function LandingPage() {
           <div style={{ width: 0, height: 0, borderLeft: '5px solid transparent', borderRight: '5px solid transparent', borderTop: '6px solid var(--text-primary)', opacity: 0.5, marginTop: '-20px' }} />
           {/* Carousel — horizontally scrollable, centered cards */}
           {/* Carousel with chevron nav */}
-          <div style={{ position: 'relative', width: '100%' }}>
+          <div style={{ position: 'relative', width: '100%', marginTop: '-30px' }}>
             {/* Left chevron */}
             <button
               onClick={() => { const next = Math.max(0, centeredCard - 1); setCenteredCard(next); scrollCardToCenter(next); }}
