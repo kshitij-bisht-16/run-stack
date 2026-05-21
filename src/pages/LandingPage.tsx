@@ -1512,21 +1512,14 @@ export default function LandingPage() {
   const carouselRef = useRef<HTMLDivElement>(null)
   const [centeredCard, setCenteredCard] = useState(0)
 
-  // Helper to scroll a card to center
+  // Helper to scroll a card to center — uses math instead of DOM rects
+  // to avoid reading mid-transition sizes (cards animate 150→200px over 400ms)
+  // Layout: padding(50%-100px) + N*(150+20gap) + centeredCard(200px)
+  // Target scrollLeft = N * 170 centers card N exactly
   const scrollCardToCenter = (index: number) => {
     const el = carouselRef.current
     if (!el) return
-    // Wait for React re-render + CSS width transition, then scroll
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        const card = el.querySelectorAll('.agents-carousel-card')[index]
-        if (!card) return
-        const wrapRect = el.getBoundingClientRect()
-        const cardRect = card.getBoundingClientRect()
-        const offset = cardRect.left - wrapRect.left + el.scrollLeft - (wrapRect.width / 2 - cardRect.width / 2)
-        el.scrollTo({ left: offset, behavior: 'smooth' })
-      })
-    })
+    el.scrollTo({ left: index * 170, behavior: 'smooth' })
   }
   // Scroll-driven reveal for the agents tree. We track the tree container's
   // viewport top + viewport height — each tree element computes its own
